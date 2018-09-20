@@ -11,9 +11,6 @@ intersect
 select dept_id-1
 from dept ;
 
-
-
-
 2) Manager Name, Reportee who joined first (Reportee Name - doj), Reportee who draws less sal (Reportee Name - salary)
 
 SELECT DISTINCT m1.Manager_name,m1.jd,m2.sd
@@ -47,21 +44,16 @@ With the above example, we dont have salary information from 2012 to 2014
 
 Assume, if above data is as commented, then there is no missing as there is no gap
 
-select concat(sd.START_DATE,'-',ed.END_DATE) Missing_Date from   
-
-(SELECT START_DATE from GENERATE_SERIES(
+SELECT concat(sd.START_DATE,'-',ed.END_DATE) Missing_Date from   
+(SELECT START_DATE FROM GENERATE_SERIES(
                        (SELECT MIN(start_date) FROM salary_history),
                        (SELECT MAX(start_date) FROM salary_history)
                       ) AS START_DATE  
                    EXCEPT (SELECT start_date FROM salary_history)) sd
-
 INNER JOIN
-
 (SELECT END_DATE  from GENERATE_SERIES(
                        (SELECT MIN(end_date) FROM salary_history),
                        (SELECT MAX(end_date) FROM salary_history)
                       ) AS END_DATE 
                    EXCEPT (SELECT end_date FROM salary_history)) ed
-
-
 on ed.END_DATE-sd.START_DATE > 1 ;
